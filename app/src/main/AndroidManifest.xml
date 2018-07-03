@@ -17,8 +17,7 @@
         <!-- Activities -->
         <activity
             android:name=".controller.SplashScreen"
-            android:theme="@style/SplashTheme"
-            >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,6 +59,7 @@
         <activity
             android:name=".controller.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".controller.IntroScreen"></activity>
     </application>
 
 </manifest>

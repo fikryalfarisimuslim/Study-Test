@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white" >
-
+    tools:context=".controller.Intro_Slide_3"
+    android:background="@color/white">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/intro_bg_img"
         android:scaleType="centerCrop" />
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
             android:id="@+id/slide_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/slide_4"
+            android:src="@drawable/slide_1"
             android:layout_centerHorizontal="true" />
 
 
@@ -38,14 +37,14 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_cart_full"
+                android:src="@drawable/ic_save"
                 android:tint="@color/colorPrimary"
                 android:layout_marginTop="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slide_4_title"
+                android:text="@string/slide_1_title"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/textColorSecondaryDark" />
@@ -53,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slide_4_desc"
+                android:text="@string/slide_1_desc"
                 android:padding="10dp"
                 android:textSize="14sp"
                 android:textAlignment="center"
@@ -62,6 +61,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </RelativeLayout>

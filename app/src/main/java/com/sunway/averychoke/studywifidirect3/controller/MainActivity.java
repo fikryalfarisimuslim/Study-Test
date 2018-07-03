@@ -18,6 +18,7 @@ public class MainActivity extends SWDBaseActivity implements FragmentManager.OnB
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main_container);
 
+
         setSupportActionBar(mBinding.toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
 
