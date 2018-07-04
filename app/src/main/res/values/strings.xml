@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Presensi</string>
     <string name="create_class_dialog_title">Membuat Kelas</string>
-    <string name="create_class_dialog_message">Masukan nama kelas</string>
+    <string name="create_class_dialog_message">Masukan nama kelas dan jumlah pertemuan</string>
     <string name="create_class_dialog_negative_button">Batal</string>
     <string name="delete_class_dialog_title">Hapus Kelas</string>
     <string name="delete_class_dialog_message">Apakah anda yakin menghapus kelas ini?</string>
@@ -87,7 +87,7 @@
     <string name="dialog_save_quiz_fail_message">Gagal menyimpan pertemuan ke database. Silakan coba lagi nanti.</string>
     <string name="open_file_permission_error_message">Anda tidak memiliki izin untuk membuka file ini</string>
     <string name="hint_quiz_title">Judul Pertemuan</string>
-    <string name="title_classes">Kelas</string>
+    <string name="title_classes">Aplikasi Presensi</string>
     <string name="dialog_download_progress_title">Download Progress</string>
     <string name="dialog_download_progress_message">Downloading %1$s</string>
 

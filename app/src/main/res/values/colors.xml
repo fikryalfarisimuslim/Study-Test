@@ -8,7 +8,7 @@
     <color name="textColorPrimaryDark">#757575</color>
 
 
-
+    <color name="node_title">#4c4c4c</color>
 
     <color name="color_primary">#3791CD</color>
     <color name="color_primary_dark">#3980B0</color>
@@ -16,6 +16,8 @@
 
     <color name="color_light">#4BADD4</color>
     <color name="color_background">#FAFAFA</color>
+    <color name="black">#000000</color>
+    <color name="grey">#A9A9A9</color>
 
     <!-- For setting -->
     <color name="darker_gray">#aaa</color>

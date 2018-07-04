@@ -1,6 +1,7 @@
 package com.sunway.averychoke.studywifidirect3.controller.class_navigation;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +20,10 @@ import android.view.ViewGroup;
 import android.databinding.DataBindingUtil;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.sunway.averychoke.studywifidirect3.controller.IntroScreen;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseFragment;
 import com.sunway.averychoke.studywifidirect3.controller.class_navigation.search.SearchClassFragment;
 import com.sunway.averychoke.studywifidirect3.controller.teacher_class.TeacherClassActivity;
@@ -31,6 +34,7 @@ import com.sunway.averychoke.studywifidirect3.manager.BaseManager;
 import com.sunway.averychoke.studywifidirect3.manager.TeacherManager;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
 import com.sunway.averychoke.studywifidirect3.model.Question;
+import com.sunway.averychoke.studywifidirect3.model.Quiz;
 import com.sunway.averychoke.studywifidirect3.model.StudyClass;
 
 import java.io.File;
@@ -44,7 +48,7 @@ public class ClassesFragment extends SWDBaseFragment implements
 
     private DatabaseHelper mDatabase;
     private ClassesNameAdapter mAdapter;
-
+    private TeacherManager sManager;
     private FragmentClassesBinding mBinding;
 
     @Override
@@ -97,6 +101,10 @@ public class ClassesFragment extends SWDBaseFragment implements
         switch (item.getItemId()) {
             case R.id.search_classes:
                 getBaseActivity().changeFragment(SearchClassFragment.newInstance(null));
+                return true;
+            case R.id.slider_info:
+                startActivity(new Intent(getBaseActivity(), IntroScreen.class));
+                getBaseActivity().finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -165,21 +173,48 @@ public class ClassesFragment extends SWDBaseFragment implements
 
     private void createClass() {
         final EditText editText = new EditText(getContext());
+        final EditText editText2 = new EditText(getContext());
         editText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        editText.setHint("Nama kelas");
+        editText2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText2.setHint("Jumlah pertemuan");
+
+
+        LinearLayout layout = new LinearLayout(getContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(editText);
+        layout.addView(editText2);
 
         final Dialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.create_class_dialog_title)
                 .setMessage(R.string.create_class_dialog_message)
-                .setView(editText)
+                .setView(layout)
                 .setPositiveButton(R.string.dialog_create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String className = editText.getText().toString();
+                        int jumlahPertemuan = Integer.parseInt(editText2.getText().toString());
                         if (!TextUtils.isEmpty(className.trim())) {
                             StudyClass studyClass = new StudyClass(className);
                             long errorCode = mDatabase.addClass(studyClass);
                             if (errorCode != -1) {
                                 mAdapter.addClassName(className);
+                                TeacherManager.getInstance().initialize(className, getContext());
+                                sManager = TeacherManager.getInstance();
+
+                                //Intent teacherIntent = new Intent(getActivity(), TeacherClassActivity.class);
+                                //startActivity(teacherIntent);
+                                for(int i=1;i<=jumlahPertemuan;i++){
+                                    Toast.makeText(getContext(), "BErhasil " + i, Toast.LENGTH_SHORT).show();
+                                    Quiz quiz = new Quiz("Pertemuan " + i);
+                                    boolean success = sManager.addQuiz(quiz);
+
+                                    //if (success) {
+
+                                    //}
+                                }
+
+
                                 return; // successfully exited the method
                             }
                         }

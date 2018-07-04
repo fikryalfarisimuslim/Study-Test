@@ -8,4 +8,10 @@
         android:title="@string/menu_search_classes"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/slider_info"
+        android:icon="@drawable/ic_info"
+        android:title="Tutorial"
+        app:showAsAction="always"/>
+
 </menu>
