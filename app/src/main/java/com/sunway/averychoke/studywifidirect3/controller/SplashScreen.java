@@ -28,8 +28,9 @@ public class SplashScreen extends AppCompatActivity {
                 // Do something after 5s = 5000ms
                 if(mPref.getFirstTime()){
                     startActivity(new Intent(getBaseContext(), IntroScreen.class));
-
-                }else{
+                }else/* if(mPref.getNIM().equals("nim") ){
+                    startActivity(new Intent(getBaseContext(), InputName.class));
+                }else*/{
                     Intent i1 = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(i1);
                 }

@@ -59,7 +59,8 @@
         <activity
             android:name=".controller.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
-        <activity android:name=".controller.IntroScreen"></activity>
+        <activity android:name=".controller.IntroScreen" />
+        <activity android:name=".controller.InputName"></activity>
     </application>
 
 </manifest>

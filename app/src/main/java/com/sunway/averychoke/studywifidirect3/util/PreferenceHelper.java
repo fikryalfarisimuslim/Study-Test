@@ -33,4 +33,25 @@ public class PreferenceHelper {
         return customCachedPrefs.getBoolean("first", true);
     }
 
+    public void setNIM(String nim) {
+        SharedPreferences.Editor mEditor = customCachedPrefs.edit();
+        mEditor.putString("nim",nim);
+        mEditor.apply();
+    }
+
+    public String getNIM() {
+        return customCachedPrefs.getString("nim", "nim");
+    }
+
+    public void setName(String name) {
+        SharedPreferences.Editor mEditor = customCachedPrefs.edit();
+        mEditor.putString("name",name);
+        mEditor.apply();
+    }
+
+    public String getName() {
+        return customCachedPrefs.getString("name", "name");
+    }
+
+
 }

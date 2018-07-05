@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sunway.averychoke.studywifidirect3.R;
+import com.sunway.averychoke.studywifidirect3.controller.IntroScreen;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseFragment;
 import com.sunway.averychoke.studywifidirect3.controller.common_class.ClassMaterialAdapter;
 import com.sunway.averychoke.studywifidirect3.controller.common_class.ClassMaterialViewHolder;
@@ -37,6 +38,7 @@ import com.sunway.averychoke.studywifidirect3.manager.StudentManager;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
 import com.sunway.averychoke.studywifidirect3.model.Question;
 import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.util.PreferenceHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,7 @@ public class StudentQuizFragment extends SWDBaseFragment implements
 
     private StudentManager sManager;
     private ClassMaterialAdapter mAdapter;
+    PreferenceHelper mPref;
 
     private FragmentClassMaterialBinding mBinding;
 
@@ -65,6 +68,8 @@ public class StudentQuizFragment extends SWDBaseFragment implements
         sManager = StudentManager.getInstance();
         mAdapter = new ClassMaterialAdapter(
                 false, this);
+        mPref = new PreferenceHelper(getBaseActivity());
+
 
     }
 
@@ -291,78 +296,28 @@ public class StudentQuizFragment extends SWDBaseFragment implements
         if(quiz.isAnswered()==false){
             final Dialog dialog = new AlertDialog.Builder(getContext())
                     .setTitle("Submit Kehadiran")
-                    .setMessage("Masukkan NIM anda!")
-                    .setView(layout)
+                    .setMessage("NIM : "+mPref.getNIM()+"\nNama : " + mPref.getName())
                     .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(NIM.getText().toString().equals("")){
-                                Toast.makeText(getContext(), "Mohon untuk isi NIM!", Toast.LENGTH_SHORT).show();
-                            }else {
-                                int status = 0;
-                                List<Quiz> listQuiz = sManager.getQuizzes();
-                                for (int i=0; i<listQuiz.size(); i++) {
-                                    List<Question> question = listQuiz.get(i).getQuestions();
-                                    for (int j=0; j<question.size(); j++) {
-                                        if(NIM.getText().toString().equals(question.get(j).getQuestion())){
-                                            status = 1;
-                                        }
-                                    }
-                                }
 
-                                if(status == 0) {
-                                    final Dialog dialog2 = new AlertDialog.Builder(getContext())
-                                            .setTitle("Submit Kehadiran")
-                                            .setMessage("Masukkan nama lengkap anda!")
-                                            .setView(layout2)
-                                            .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    if (NAME.getText().toString().equals("")) {
-                                                        Toast.makeText(getContext(), "Mohon untuk isi Nama!", Toast.LENGTH_SHORT).show();
-                                                    }else{
-                                                        ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), null, quiz);
-                                                        task.execute(TeacherThread.Request.NIMNAMA, quiz.getName(), NIM.getText().toString(), NAME.getText().toString());
-                                                        //Question question = new Question();
-                                                        //question.getId();
-                                                       // question.setQuestion(NIM.getText().toString());
-                                                        //question.setCorrectAnswer(NAME.getText().toString());
-                                                       // quiz.getQuestions().add(question);
-                                                       // Quiz submit = sManager.updateQuiz(quiz);
-                                                        /*quiz.setAnswered(true);
-                                                        sManager.updateQuizAnswers(quiz);
 
-                                                        mAdapter.setClassMaterials(sManager.getQuizzes());*/
-                                                        downloadQuiz(quiz);
-                                                        dialog3.show();
-
-                                                    }
-                                                }
-                                            })
-                                            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                }
-                                            }).show();
-                                }else {
                                     //Question question = new Question();
                                     //question.getId();
                                     //question.setQuestion(NIM.getText().toString());
                                     //question.setCorrectAnswer(NAME.getText().toString());
                                     //quiz.getQuestions().add(question);
-                                    ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), null, quiz);
-                                    task.execute(TeacherThread.Request.NIMNAMA, quiz.getName(), NIM.getText().toString(), NAME.getText().toString());
+                            ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), null, quiz);
+                            task.execute(TeacherThread.Request.NIMNAMA, quiz.getName(), mPref.getNIM(), mPref.getName());
 
                                     /*quiz.setAnswered(true);
                                     sManager.updateQuizAnswers(quiz);
                                     mAdapter.setClassMaterials(sManager.getQuizzes());*/
-                                    dialog3.show();
+                                    //dialog3.show();
                                     downloadQuiz(quiz);
                                     //downloadQuiz((Quiz) classMaterial);
-                                }
 
-                            }
+
                         }
                     })
                     .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

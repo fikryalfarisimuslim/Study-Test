@@ -55,9 +55,13 @@ public class IntroScreen extends AppIntro {
         super.onDonePressed(currentFragment);
 
         mPref.setFirstTime(false);
+        /*if(mPref.getNIM().equals("nim") ){
+            startActivity(new Intent(getBaseContext(), InputName.class));
+        }else{
+            startActivity(new Intent(getBaseContext(), MainActivity.class));
+        }*/
+        startActivity(new Intent(getBaseContext(), MainActivity.class));
 
-        Intent i1 = new Intent(IntroScreen.this, MainActivity.class);
-        startActivity(i1);
         finish();
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_out_right);
     }
@@ -71,8 +75,13 @@ public class IntroScreen extends AppIntro {
 
         mPref.setFirstTime(false);
 
-        Intent i1 = new Intent(IntroScreen.this, MainActivity.class);
-        startActivity(i1);
+        /*if(mPref.getNIM().equals("nim") ){
+            startActivity(new Intent(getBaseContext(), InputName.class));
+        }else{
+            startActivity(new Intent(getBaseContext(), MainActivity.class));
+        }*/
+        startActivity(new Intent(getBaseContext(), MainActivity.class));
+
         finish();
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_out_right);
 
@@ -86,9 +95,14 @@ public class IntroScreen extends AppIntro {
         super.onBackPressed();
 
         mPref.setFirstTime(false);
+        /*
+        if(mPref.getNIM().equals("nim") ){
+            startActivity(new Intent(getBaseContext(), InputName.class));
+        }else{
+            startActivity(new Intent(getBaseContext(), MainActivity.class));
+        }*/
+        startActivity(new Intent(getBaseContext(), MainActivity.class));
 
-        Intent i1 = new Intent(IntroScreen.this, MainActivity.class);
-        startActivity(i1);
         finish();
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_out_right);
 

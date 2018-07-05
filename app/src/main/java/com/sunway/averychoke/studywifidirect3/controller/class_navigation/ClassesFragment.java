@@ -79,6 +79,7 @@ public class ClassesFragment extends SWDBaseFragment implements
         mBinding.classesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.classesRecyclerView.setAdapter(mAdapter);
 
+
         mBinding.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +115,7 @@ public class ClassesFragment extends SWDBaseFragment implements
     // region class view holder
     @Override
     public void onClassSelected(final String className) {
-        final CharSequence[] choices = new CharSequence[] {
+        /*final CharSequence[] choices = new CharSequence[] {
                 getString(R.string.option_host_class),
                 getString(R.string.option_participate_class)
         };
@@ -124,18 +125,18 @@ public class ClassesFragment extends SWDBaseFragment implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: // Host class
+                            case 0: // Host class*/
                                 TeacherManager.getInstance().initialize(className, getContext());
                                 Intent teacherIntent = new Intent(getActivity(), TeacherClassActivity.class);
                                 startActivity(teacherIntent);
-                                break;
+                                /*break;
                             case 1: // Participate class
                                 getBaseActivity().changeFragment(SearchClassFragment.newInstance(className));
                                 break;
                         }
                     }
                 })
-                .show();
+                .show();*/
     }
 
     @Override
@@ -205,7 +206,7 @@ public class ClassesFragment extends SWDBaseFragment implements
                                 //Intent teacherIntent = new Intent(getActivity(), TeacherClassActivity.class);
                                 //startActivity(teacherIntent);
                                 for(int i=1;i<=jumlahPertemuan;i++){
-                                    Toast.makeText(getContext(), "BErhasil " + i, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "BErhasil " + i, Toast.LENGTH_SHORT).show();
                                     Quiz quiz = new Quiz("Pertemuan " + i);
                                     boolean success = sManager.addQuiz(quiz);
 
