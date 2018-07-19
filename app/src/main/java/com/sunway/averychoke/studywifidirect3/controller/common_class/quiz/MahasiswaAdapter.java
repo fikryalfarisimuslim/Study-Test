@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sunway.averychoke.studywifidirect3.R;
-import com.sunway.averychoke.studywifidirect3.model.Question;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +15,38 @@ import java.util.List;
  * Created by AveryChoke on 3/4/2017.
  */
 
-public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MahasiswaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<Question> mQuestions;
-    private int mLastShortQuestionIndex = -1;
+    private final List<Mahasiswa> mMahasiswa;
+    private int mLastShortMahasiswaIndex = -1;
 
-    public QuestionsAdapter() {
-        mQuestions = new ArrayList<>();
+    public MahasiswaAdapter() {
+        mMahasiswa = new ArrayList<>();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_question, parent, false);
-        QuestionViewHolder viewHolder = new QuestionViewHolder(rootView);
+        MahasiswaViewHolder viewHolder = new MahasiswaViewHolder(rootView);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof HasQuestion) {
-            HasQuestion questionVH = ((HasQuestion) holder);
-            questionVH.setQuestion(mQuestions.get(position), mLastShortQuestionIndex);
+        if (holder instanceof HasMahasiswa) {
+            HasMahasiswa mahasiswaVH = ((HasMahasiswa) holder);
+            mahasiswaVH.setMahasiswa(mMahasiswa.get(position), mLastShortMahasiswaIndex);
         }
     }
 
     @Override
     public int getItemCount() {
-        return mQuestions.size();
+        return mMahasiswa.size();
     }
 
-    public void setQuestions(List<Question> questions) {
-        mQuestions.clear();
-        mQuestions.addAll(questions);
+    public void setMahasiswa(List<Mahasiswa> mahasiswa) {
+        mMahasiswa.clear();
+        mMahasiswa.addAll(mahasiswa);
         //findLastShortQuestionIndex();
         notifyDataSetChanged();
     }
@@ -60,8 +60,8 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }*/
 
     // region get set
-    protected List<Question> getQuestions() {
-        return mQuestions;
+    protected List<Mahasiswa> getQuestions() {
+        return mMahasiswa;
     }
     // endregion
 }

@@ -1,6 +1,6 @@
 package com.sunway.averychoke.studywifidirect3.controller.teacher_class.quiz;
 
-import android.app.Activity;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,12 +24,10 @@ import com.sunway.averychoke.studywifidirect3.R;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseFragment;
 import com.sunway.averychoke.studywifidirect3.controller.common_class.ClassMaterialAdapter;
 import com.sunway.averychoke.studywifidirect3.controller.common_class.ClassMaterialViewHolder;
-import com.sunway.averychoke.studywifidirect3.database.DatabaseHelper;
 import com.sunway.averychoke.studywifidirect3.databinding.FragmentClassMaterialBinding;
 import com.sunway.averychoke.studywifidirect3.manager.TeacherManager;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 
 /**
  * Created by AveryChoke on 29/1/2017.
@@ -43,8 +41,6 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
 
     private TeacherManager sManager;
     private ClassMaterialAdapter mAdapter;
-    private DatabaseHelper mDatabase;
-    private Quiz mQuiz;
     String mOldName;
 
     private FragmentClassMaterialBinding mBinding;
@@ -115,7 +111,7 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
     // region class material view holder
     @Override
     public void onClassMaterialSelected(@NonNull ClassMaterial classMaterial) {
-        final Quiz quiz = (Quiz) classMaterial;
+        final Meeting meeting = (Meeting) classMaterial;
 
         /*
         final CharSequence[] choices = new CharSequence[] {
@@ -130,7 +126,7 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
                         switch (which) {
                             case 0: // View Quiz*/
                                 Intent viewIntent = new Intent(getActivity(), ViewQuizActivity.class);
-                                viewIntent.putExtra(ViewQuizActivity.ARGS_QUIZ_KEY, (Parcelable)quiz);
+                                viewIntent.putExtra(ViewQuizActivity.ARGS_QUIZ_KEY, (Parcelable)meeting);
                                 startActivity(viewIntent);
                                 /*break;
                             case 1: // Edit Quiz
@@ -154,9 +150,9 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
                 .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Quiz quiz = (Quiz) classMaterial;
+                        Meeting meeting = (Meeting) classMaterial;
                         mAdapter.removeClassMaterial(index);
-                        sManager.deleteQuiz(quiz);
+                        sManager.deleteMeeting(meeting);
                     }
                 })
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -170,9 +166,9 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
 
     @Override
     public void onClassMaterialChecked(@NonNull ClassMaterial classMaterial, @NonNull boolean isChecked) {
-        Quiz quiz = (Quiz) classMaterial;
-        quiz.setVisible(isChecked);
-        sManager.updateQuizVisible(quiz);
+        Meeting meeting = (Meeting) classMaterial;
+        meeting.setVisible(isChecked);
+        sManager.updateMeetingVisible(meeting);
     }
     // endregion class material view holder
 
@@ -188,7 +184,7 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String meetingName = editText.getText().toString();
-                        if (sManager.isQuizNameConflicting(meetingName, mOldName)) {
+                        if (sManager.isMeetingNameConflicting(meetingName, mOldName)) {
                             new AlertDialog.Builder(getContext())
                                     .setTitle(R.string.dialog_invalid_quiz_name_title)
                                     .setMessage(R.string.dialog_invalid_quiz_name_message)
@@ -205,12 +201,12 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
                         if (!TextUtils.isEmpty(meetingName.trim())) {
                             // mMeeting.setName(meetingName);
 
-                            Quiz quiz = new Quiz(meetingName);
+                            Meeting meeting = new Meeting(meetingName);
 
                             //quiz.getQuestions().add(question);
 
                             //mDatabase.addMeeting(meeting, sManager.getClassName());
-                            boolean success = sManager.addQuiz(quiz);
+                            boolean success = sManager.addMeeting(meeting);
                             //Toast.makeText(getContext(), quiz.getId()+ "-" + quiz.getName()+ "-" + quiz.getVersion(), Toast.LENGTH_SHORT).show();
                             if (success) {
 
@@ -218,7 +214,7 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
 
                                 //sManager.updateQuiz(mQuiz, quiz.getName());
                                 //mDatabase.getQuizQuestions(quiz.getId());
-                                Toast.makeText(getContext(), "Berhasil dibuat " + quiz.getName(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Berhasil dibuat " + meeting.getName(), Toast.LENGTH_SHORT).show();
                                 //mAdapter.addClassMaterial(meeting);
                                 /*
                                 Question question = new Question();

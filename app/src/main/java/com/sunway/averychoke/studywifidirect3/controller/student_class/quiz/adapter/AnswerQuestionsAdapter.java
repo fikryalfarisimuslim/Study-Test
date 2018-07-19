@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sunway.averychoke.studywifidirect3.R;
-import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.QuestionsAdapter;
+import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.MahasiswaAdapter;
 import com.sunway.averychoke.studywifidirect3.databinding.CellSubmitBinding;
 
 /**
  * Created by AveryChoke on 3/4/2017.
  */
 
-public class AnswerQuestionsAdapter extends QuestionsAdapter {
+public class AnswerQuestionsAdapter extends MahasiswaAdapter {
     private static final int QUESTION_VH = 101;
     private static final int SUBMIT_VH = 102;
 

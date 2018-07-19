@@ -1,7 +1,6 @@
 package com.sunway.averychoke.studywifidirect3.controller.class_navigation;
 
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,8 +32,8 @@ import com.sunway.averychoke.studywifidirect3.R;
 import com.sunway.averychoke.studywifidirect3.manager.BaseManager;
 import com.sunway.averychoke.studywifidirect3.manager.TeacherManager;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 import com.sunway.averychoke.studywifidirect3.model.StudyClass;
 
 import java.io.File;
@@ -60,7 +59,7 @@ public class ClassesFragment extends SWDBaseFragment implements
 
         // set the id counter for the model objects
         ClassMaterial.mCounter = mDatabase.getClassMaterialMaxId();
-        Question.mCounter = mDatabase.getQuestionMaxId();
+        Mahasiswa.mCounter = mDatabase.getMahasiswaMaxId();
     }
 
     @Override
@@ -207,8 +206,8 @@ public class ClassesFragment extends SWDBaseFragment implements
                                 //startActivity(teacherIntent);
                                 for(int i=1;i<=jumlahPertemuan;i++){
                                     //Toast.makeText(getContext(), "BErhasil " + i, Toast.LENGTH_SHORT).show();
-                                    Quiz quiz = new Quiz("Pertemuan " + i);
-                                    boolean success = sManager.addQuiz(quiz);
+                                    Meeting meeting = new Meeting("Pertemuan " + i);
+                                    boolean success = sManager.addMeeting(meeting);
 
                                     //if (success) {
 

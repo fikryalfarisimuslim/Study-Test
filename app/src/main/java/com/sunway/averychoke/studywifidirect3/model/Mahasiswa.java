@@ -9,40 +9,40 @@ import java.io.Serializable;
  * Created by AveryChoke on 27/1/2017.
  */
 
-public class Question implements Parcelable, Serializable {
+public class Mahasiswa implements Parcelable, Serializable {
 
     public static long mCounter = 0;
 
     private long mId;
-    private String mQuestion;
+    private String mMahasiswa;
     private String mCorrectAnswer;
     private String mUserAnswer;
 
-    public Question(String question, String correctAnswer) {
-        this(++mCounter, question, correctAnswer,  "");
+    public Mahasiswa(String mahasiswa, String correctAnswer) {
+        this(++mCounter, mahasiswa, correctAnswer,  "");
     }
 
     //for database
-    public Question(long id, String question, String correctAnswer,  String userAnswer) {
+    public Mahasiswa(long id, String mahasiswa, String correctAnswer,  String userAnswer) {
         mId = id;
-        mQuestion = question;
+        mMahasiswa = mahasiswa;
         mCorrectAnswer = correctAnswer;
         mUserAnswer = userAnswer;
     }
 
-    // for create question
-    public Question() {
+    // for create mahassiwa
+    public Mahasiswa() {
         this("", "");
     }
 
-    // convert to question
-    public static Question cloneFrom(Question question) {
-        Question cloneQuestion = new Question(
-                question.getId(),
-                question.getQuestion(),
-                question.getCorrectAnswer(),
+    // convert to mahasiswa
+    public static Mahasiswa cloneFrom(Mahasiswa mahasiswa) {
+        Mahasiswa cloneMahasiswa = new Mahasiswa(
+                mahasiswa.getId(),
+                mahasiswa.getMahasiswa(),
+                mahasiswa.getCorrectAnswer(),
                 "");
-        return cloneQuestion;
+        return cloneMahasiswa;
     }
 
     public boolean checkAnswer() {
@@ -64,14 +64,14 @@ public class Question implements Parcelable, Serializable {
         return mId;
     }
 
-    public String getQuestion()
+    public String getMahasiswa()
     {
-        return mQuestion;
+        return mMahasiswa;
     }
 
-    public void setQuestion(String question)
+    public void setMahasiswa(String mahasiswa)
     {
-        mQuestion = question;
+        mMahasiswa = mahasiswa;
     }
 
     public String getCorrectAnswer()
@@ -101,25 +101,25 @@ public class Question implements Parcelable, Serializable {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeLong(mId);
-        out.writeString(mQuestion);
+        out.writeString(mMahasiswa);
         out.writeString(mCorrectAnswer);
         out.writeString(mUserAnswer);
     }
 
 
-    public static final Parcelable.Creator<Question> CREATOR = new Parcelable.Creator<Question>() {
-        public Question createFromParcel(Parcel in) {
-            return new Question(in);
+    public static final Parcelable.Creator<Mahasiswa> CREATOR = new Parcelable.Creator<Mahasiswa>() {
+        public Mahasiswa createFromParcel(Parcel in) {
+            return new Mahasiswa(in);
         }
 
-        public Question[] newArray(int size) {
-            return new Question[size];
+        public Mahasiswa[] newArray(int size) {
+            return new Mahasiswa[size];
         }
     };
 
-    protected Question(Parcel in) {
+    protected Mahasiswa(Parcel in) {
         mId = in.readLong();
-        mQuestion = in.readString();
+        mMahasiswa = in.readString();
         mCorrectAnswer = in.readString();
         mUserAnswer = in.readString();
     }

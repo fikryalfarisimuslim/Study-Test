@@ -10,19 +10,19 @@ import java.util.List;
 public class StudyClass {
 
     private final String mName;
-    private List<Quiz> mQuizzes;
+    private List<Meeting> mMeetingz;
     private List<StudyMaterial> mStudyMaterials;
 
     public StudyClass(String name) {
         mName = name;
-        mQuizzes = new ArrayList<>();
+        mMeetingz = new ArrayList<>();
         mStudyMaterials = new ArrayList<>();
     }
 
     // for database
-    public StudyClass(String name, List<Quiz> quizzes, List<StudyMaterial> studyMaterials) {
+    public StudyClass(String name, List<Meeting> meetingz, List<StudyMaterial> studyMaterials) {
         mName = name;
-        mQuizzes = quizzes;
+        mMeetingz = meetingz;
         mStudyMaterials = studyMaterials;
     }
 
@@ -31,12 +31,12 @@ public class StudyClass {
         return mName;
     }
 
-    public List<Quiz> getQuizzes() {
-        return mQuizzes;
+    public List<Meeting> getMeetingz() {
+        return mMeetingz;
     }
 
-    public void setQuizzes(List<Quiz> quizzes) {
-        mQuizzes = quizzes;
+    public void setMeetingz(List<Meeting> meetingz) {
+        mMeetingz = meetingz;
     }
 
     public List<StudyMaterial> getStudyMaterials() {

@@ -1,6 +1,5 @@
 package com.sunway.averychoke.studywifidirect3.controller.connection;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;

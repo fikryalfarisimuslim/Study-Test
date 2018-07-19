@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sunway.averychoke.studywifidirect3.R;
-import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.QuestionViewHolder;
-import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.QuestionsAdapter;
+import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.MahasiswaViewHolder;
+import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.MahasiswaAdapter;
 import com.sunway.averychoke.studywifidirect3.databinding.CellResultBinding;
-import com.sunway.averychoke.studywifidirect3.model.Question;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
  * Created by AveryChoke on 4/4/2017.
  */
 
-public class ResultQuestionsAdapter extends QuestionsAdapter {
+public class ResultQuestionsAdapter extends MahasiswaAdapter {
     private static final int QUESTION_VH = 101;
     private static final int RESULT_VH = 102;
 
@@ -59,7 +59,7 @@ public class ResultQuestionsAdapter extends QuestionsAdapter {
     }
 
     // region View Holder
-    static class ResultQuestionViewHolder extends QuestionViewHolder {
+    static class ResultQuestionViewHolder extends MahasiswaViewHolder {
 
         public ResultQuestionViewHolder(View itemView) {
             super(itemView);
@@ -68,10 +68,10 @@ public class ResultQuestionsAdapter extends QuestionsAdapter {
 
 
         @Override
-        public void setQuestion(Question question, int lastIndex) {
-            super.setQuestion(question, lastIndex);
+        public void setMahasiswa(Mahasiswa mahasiswa, int lastIndex) {
+            super.setMahasiswa(mahasiswa, lastIndex);
 
-            if (question != null) {
+            if (mahasiswa != null) {
                 //getBinding().marksTextView.setText(String.format("%d/%d",
                 //        question.checkAnswer() ? question.getTotalMarks() : 0,
                 //        question.getTotalMarks()));
@@ -88,24 +88,13 @@ public class ResultQuestionsAdapter extends QuestionsAdapter {
 
 
 
-        private void changeColor(AppCompatRadioButton radioButton, int color) {
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{
-                            new int[]{-android.R.attr.state_checked},
-                            new int[]{android.R.attr.state_checked}
-                    },
-                    new int[]{color, color}
-            );
-            CompoundButtonCompat.setButtonTintList(radioButton, colorStateList);
-            radioButton.setTextColor(color);
-        }
     }
     // endregion
 
     static class ResultViewHolder extends RecyclerView.ViewHolder {
         private CellResultBinding mBinding;
 
-        public ResultViewHolder(View itemView, List<Question> questions) {
+        public ResultViewHolder(View itemView, List<Mahasiswa> mahasiswas) {
             super(itemView);
             mBinding = DataBindingUtil.bind(itemView);
 

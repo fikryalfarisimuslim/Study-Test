@@ -10,7 +10,7 @@ import android.support.v7.app.AlertDialog;
 import com.sunway.averychoke.studywifidirect3.R;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseActivity;
 import com.sunway.averychoke.studywifidirect3.databinding.ActivityMainContainerBinding;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 
 /**
  * Created by AveryChoke on 2/4/2017.
@@ -30,10 +30,10 @@ public class AnswerQuizActivity extends SWDBaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        Quiz quiz = getIntent().getParcelableExtra(ARGS_QUIZ_KEY);
-        if (quiz != null) {
-            setTitle(quiz.getName());
-            Fragment fragment = quiz.isAnswered() ? QuizResultFragment.newInstance(quiz) : AnswerQuizFragment.newInstance(quiz);
+        Meeting meeting = getIntent().getParcelableExtra(ARGS_QUIZ_KEY);
+        if (meeting != null) {
+            setTitle(meeting.getName());
+            Fragment fragment = meeting.isAnswered() ? QuizResultFragment.newInstance(meeting) : AnswerQuizFragment.newInstance(meeting);
             getSupportFragmentManager().beginTransaction()
                     .add(mBinding.containerLayout.getId(), fragment, fragment.getClass().getSimpleName())
                     .addToBackStack(fragment.getClass().getSimpleName())

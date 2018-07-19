@@ -5,8 +5,8 @@ import android.content.Context;
 import com.sunway.averychoke.studywifidirect3.controller.connection.ClassMaterialsRequestTask;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
 import com.sunway.averychoke.studywifidirect3.model.DeviceClass;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 import com.sunway.averychoke.studywifidirect3.model.StudyMaterial;
 
 import java.util.ArrayList;
@@ -40,78 +40,78 @@ public class StudentManager extends BaseManager {
     }
 
     // region Quiz
-    public void updateQuizAnswers(Quiz quiz) {
+    public void updateQuizAnswers(Meeting meeting) {
         if (getDatabase() == null || getStudyClass() == null
-                || getDatabase().updateQuizAnswers(quiz) == -1) {
+                || getDatabase().updateQuizAnswers(meeting) == -1) {
             return;
         }
 
-        int index = getStudyClass().getQuizzes().indexOf(quiz);
-        getStudyClass().getQuizzes().set(index, quiz);
+        int index = getStudyClass().getMeetingz().indexOf(meeting);
+        getStudyClass().getMeetingz().set(index, meeting);
     }
 
-    public void resetQuizAnswer(Quiz quiz) {
-        quiz.setAnswered(false);
-        for (Question question : quiz.getQuestions()) {
-            question.setUserAnswer("");
+    public void resetQuizAnswer(Meeting meeting) {
+        meeting.setAnswered(false);
+        for (Mahasiswa mahasiswa : meeting.getMahasiswa()) {
+            mahasiswa.setUserAnswer("");
         }
 
-        int index = getStudyClass().getQuizzes().indexOf(quiz);
-        getStudyClass().getQuizzes().set(index, quiz);
+        int index = getStudyClass().getMeetingz().indexOf(meeting);
+        getStudyClass().getMeetingz().set(index, meeting);
 
         if (getDatabase() != null) {
-            getDatabase().updateQuizAnswers(quiz);
+            getDatabase().updateQuizAnswers(meeting);
         }
     }
 
-    public void updateQuizStatus(Quiz quiz, ClassMaterial.Status status) {
+    public void updateQuizStatus(Meeting meeting, ClassMaterial.Status status) {
         if (getStudyClass() != null) {
-            int index = getStudyClass().getQuizzes().indexOf(quiz);
-            quiz.setStatus(status);
-            getStudyClass().getQuizzes().set(index, quiz);
+            int index = getStudyClass().getMeetingz().indexOf(meeting);
+            meeting.setStatus(status);
+            getStudyClass().getMeetingz().set(index, meeting);
         }
     }
 
-    public void updateQuizzes(List<Quiz> quizzes) {
+    public void updateMeetingz(List<Meeting> meetingz) {
         if (getStudyClass() == null || getDatabase() == null) {
             return;
         }
 
         // update current data
-        for (Quiz quiz : quizzes) {
-            int index = getQuizIndex(quiz);
+        for (Meeting meeting : meetingz) {
+            int index = getQuizIndex(meeting);
             if (index == -1) {
-                quiz.resetId();
-                getStudyClass().getQuizzes().add(quiz);
-            } else if(getStudyClass().getQuizzes().get(index).getVersion() != quiz.getVersion()) {
-                getStudyClass().getQuizzes().get(index).setStatus(ClassMaterial.Status.ERROR);
+                meeting.resetId();
+                getStudyClass().getMeetingz().add(meeting);
+            } else if(getStudyClass().getMeetingz().get(index).getVersion() != meeting.getVersion()) {
+                getStudyClass().getMeetingz().get(index).setStatus(ClassMaterial.Status.ERROR);
             }
         }
 
         // update database
-        getDatabase().updateClassQuizzes(getStudyClass());
+        getDatabase().updateClassMeetingz(getStudyClass());
     }
 
     // used for conflict or if user want to dl a new version
-    public Quiz updateQuiz(Quiz quiz) {
-        if (getStudyClass() == null || getDatabase() == null || quiz == null) {
+    public Meeting updateQuiz(Meeting meeting) {
+        if (getStudyClass() == null || getDatabase() == null || meeting == null) {
             return null;
         }
 
-        int index = getQuizIndex(quiz);
+        int index = getQuizIndex(meeting);
         if (index != -1) {
-            Quiz myQuiz = getStudyClass().getQuizzes().get(index);
-            myQuiz.update(quiz);
-            getDatabase().updateQuiz(myQuiz);
-            return myQuiz;
+            Meeting myMeeting = getStudyClass().getMeetingz().get(index);
+            myMeeting.update(meeting);
+            getDatabase().updateMeeting(myMeeting);
+            return myMeeting;
         }
-        return quiz;
+        return meeting;
     }
     
-    private int getQuizIndex(Quiz quiz) {
+    private int getQuizIndex(Meeting meeting) {
         if (getStudyClass() != null) {
-            for (int i = 0; i < getStudyClass().getQuizzes().size(); i++) {
-                if (getStudyClass().getQuizzes().get(i).getName().equalsIgnoreCase(quiz.getName())) {
+            for (int i = 0; i < getStudyClass().getMeetingz().size(); i++) {
+                if (getStudyClass().getMeetingz().get(i).getName().equalsIgnoreCase(meeting.getName())) {
                     return i;
                 }
             }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 import com.sunway.averychoke.studywifidirect3.model.StudyMaterial;
 
 import java.io.File;
@@ -22,16 +22,16 @@ public class TeacherManager extends BaseManager {
 
     private static final TeacherManager sInstance = new TeacherManager();
 
-    private final Map<String, Quiz> mQuizMap;
+    private final Map<String, Meeting> mMeetingMap;
     private final Map<String, StudyMaterial> mStudyMaterialMap;
-    private final ReentrantReadWriteLock mQuizLock;
+    private final ReentrantReadWriteLock mMeetingLock;
     private final ReentrantReadWriteLock mStudyMaterialLock;
 
     private TeacherManager() {
         super();
-        mQuizMap = new HashMap<>();
+        mMeetingMap = new HashMap<>();
         mStudyMaterialMap = new HashMap<>();
-        mQuizLock = new ReentrantReadWriteLock();
+        mMeetingLock = new ReentrantReadWriteLock();
         mStudyMaterialLock = new ReentrantReadWriteLock();
     }
 
@@ -44,12 +44,12 @@ public class TeacherManager extends BaseManager {
         super.initialize(className, context);
 
         // clear data
-        mQuizMap.clear();
+        mMeetingMap.clear();
         mStudyMaterialMap.clear();
 
         // change the list into map
-        for (Quiz quiz : getStudyClass().getQuizzes()) {
-            mQuizMap.put(quiz.getName().toLowerCase(), quiz);
+        for (Meeting meeting : getStudyClass().getMeetingz()) {
+            mMeetingMap.put(meeting.getName().toLowerCase(), meeting);
         }
         for (StudyMaterial studyMaterial : getStudyClass().getStudyMaterials()) {
             mStudyMaterialMap.put(studyMaterial.getName().toLowerCase(), studyMaterial);
@@ -57,120 +57,120 @@ public class TeacherManager extends BaseManager {
     }
 
     // region Quiz
-    public List<Quiz> getVisibleQuizzes() {
-        mQuizLock.readLock().lock();
+    public List<Meeting> getVisibleMeetingz() {
+        mMeetingLock.readLock().lock();
         try {
-            List<Quiz> visibleQuizzes = new ArrayList<>();
-            for (Quiz quiz : getQuizzes()) {
-                if (quiz.isVisible()) {
-                    visibleQuizzes.add(quiz);
+            List<Meeting> visibleQuizzes = new ArrayList<>();
+            for (Meeting meeting : getQuizzes()) {
+                if (meeting.isVisible()) {
+                    visibleQuizzes.add(meeting);
                 }
             }
             return visibleQuizzes;
         } finally {
-            mQuizLock.readLock().unlock();
+            mMeetingLock.readLock().unlock();
         }
     }
 
-    public Quiz findQuiz(String name) {
-        mQuizLock.readLock().lock();
+    public Meeting findMeeting(String name) {
+        mMeetingLock.readLock().lock();
         try {
-            Quiz quiz = mQuizMap.get(name.toLowerCase());
-            if (quiz != null && quiz.isVisible()) {
-                return quiz;
+            Meeting meeting = mMeetingMap.get(name.toLowerCase());
+            if (meeting != null && meeting.isVisible()) {
+                return meeting;
             } else {
                 return null;
             }
         } finally {
-            mQuizLock.readLock().unlock();
+            mMeetingLock.readLock().unlock();
         }
     }
 
-    public boolean addQuiz(Quiz quiz) {
+    public boolean addMeeting(Meeting meeting) {
         if (getDatabase() == null || getStudyClass() == null
-                // save the quiz to database
-                || getDatabase().addQuiz(quiz, getStudyClass().getName()) == -1) {
+                // save the Meeting to database
+                || getDatabase().addMeeting(meeting, getStudyClass().getName()) == -1) {
             return false;
         }
 
-        mQuizLock.writeLock().lock();
+        mMeetingLock.writeLock().lock();
         try {
-            getStudyClass().getQuizzes().add(quiz);
-            mQuizMap.put(quiz.getName().toLowerCase(), quiz);
+            getStudyClass().getMeetingz().add(meeting);
+            mMeetingMap.put(meeting.getName().toLowerCase(), meeting);
             return true;
         } finally {
-            mQuizLock.writeLock().unlock();
+            mMeetingLock.writeLock().unlock();
         }
     }
 
-    public boolean updateQuiz(Quiz quiz, String oldName) {
-        quiz.setVersion(quiz.getVersion() + 1);
+    public boolean updateMeeting(Meeting meeting, String oldName) {
+        meeting.setVersion(meeting.getVersion() + 1);
         if (getDatabase() == null || getStudyClass() == null
                 // update the quiz in database
-                || getDatabase().updateQuiz(quiz) == -1) {
+                || getDatabase().updateMeeting(meeting) == -1) {
             return false;
         }
 
         int index = -1;
-        mQuizLock.readLock().lock();
+        mMeetingLock.readLock().lock();
         try {
-            index = getStudyClass().getQuizzes().indexOf(quiz);
+            index = getStudyClass().getMeetingz().indexOf(meeting);
         } finally {
-            mQuizLock.readLock().unlock();
+            mMeetingLock.readLock().unlock();
         }
 
         if (index >= 0) {
-            mQuizLock.writeLock().lock();
+            mMeetingLock.writeLock().lock();
             try {
-                getStudyClass().getQuizzes().set(index, quiz);
-                mQuizMap.remove(oldName);
-                mQuizMap.put(quiz.getName().toLowerCase(), quiz);
+                getStudyClass().getMeetingz().set(index, meeting);
+                mMeetingMap.remove(oldName);
+                mMeetingMap.put(meeting.getName().toLowerCase(), meeting);
                 return true;
             } finally {
-                mQuizLock.writeLock().unlock();
+                mMeetingLock.writeLock().unlock();
             }
         } else {
             return false;
         }
     }
 
-    public void updateQuizVisible(Quiz quiz) {
+    public void updateMeetingVisible(Meeting meeting) {
         if (getStudyClass() != null && getDatabase() != null) {
-            getDatabase().updateClassMaterialVisible(quiz);
+            getDatabase().updateClassMaterialVisible(meeting);
 
-            mQuizLock.readLock().lock();
+            mMeetingLock.readLock().lock();
             try {
-                int index = getStudyClass().getQuizzes().indexOf(quiz);
-                getStudyClass().getQuizzes().set(index, quiz);
-                mQuizMap.remove(quiz.getName());
-                mQuizMap.put(quiz.getName().toLowerCase(), quiz);
+                int index = getStudyClass().getMeetingz().indexOf(meeting);
+                getStudyClass().getMeetingz().set(index, meeting);
+                mMeetingMap.remove(meeting.getName());
+                mMeetingMap.put(meeting.getName().toLowerCase(), meeting);
             } finally {
-                mQuizLock.readLock().unlock();
+                mMeetingLock.readLock().unlock();
             }
         }
     }
 
     @Override
-    public void deleteQuiz(Quiz quiz) {
-        mQuizLock.writeLock().lock();
+    public void deleteMeeting(Meeting meeting) {
+        mMeetingLock.writeLock().lock();
         try {
-            super.deleteQuiz(quiz);
-            mQuizMap.remove(quiz.getName().toLowerCase());
+            super.deleteMeeting(meeting);
+            mMeetingMap.remove(meeting.getName().toLowerCase());
         } finally {
-            mQuizLock.writeLock().unlock();
+            mMeetingLock.writeLock().unlock();
         }
     }
 
-    public boolean isQuizNameConflicting(String newName, @Nullable String oldName) {
+    public boolean isMeetingNameConflicting(String newName, @Nullable String oldName) {
         if (oldName != null) {
-            mQuizLock.readLock().lock();
+            mMeetingLock.readLock().lock();
             try {
-                return !newName.equalsIgnoreCase(oldName) && mQuizMap.containsKey(newName.toLowerCase());
+                return !newName.equalsIgnoreCase(oldName) && mMeetingMap.containsKey(newName.toLowerCase());
             } finally {
-                mQuizLock.readLock().unlock();
+                mMeetingLock.readLock().unlock();
             }
         } else {
-            return mQuizMap.containsKey(newName.toLowerCase());
+            return mMeetingMap.containsKey(newName.toLowerCase());
         }
     }
     // endregion

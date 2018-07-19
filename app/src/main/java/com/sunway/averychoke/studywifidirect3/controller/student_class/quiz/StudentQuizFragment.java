@@ -1,20 +1,16 @@
 package com.sunway.averychoke.studywifidirect3.controller.student_class.quiz;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputType;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sunway.averychoke.studywifidirect3.R;
-import com.sunway.averychoke.studywifidirect3.controller.IntroScreen;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseFragment;
 import com.sunway.averychoke.studywifidirect3.controller.common_class.ClassMaterialAdapter;
 import com.sunway.averychoke.studywifidirect3.controller.common_class.ClassMaterialViewHolder;
@@ -32,17 +27,11 @@ import com.sunway.averychoke.studywifidirect3.controller.connection.ClassMateria
 import com.sunway.averychoke.studywifidirect3.controller.connection.ClassMaterialsRequestTask;
 import com.sunway.averychoke.studywifidirect3.controller.connection.DownloadException;
 import com.sunway.averychoke.studywifidirect3.controller.connection.TeacherThread;
-import com.sunway.averychoke.studywifidirect3.database.DatabaseHelper;
 import com.sunway.averychoke.studywifidirect3.databinding.FragmentClassMaterialBinding;
 import com.sunway.averychoke.studywifidirect3.manager.StudentManager;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 import com.sunway.averychoke.studywifidirect3.util.PreferenceHelper;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -108,9 +97,9 @@ public class StudentQuizFragment extends SWDBaseFragment implements
         switch (requestCode) {
             case ANSWER_QUIZ_CODE:
                 if (resultCode == RESULT_OK) {
-                    Quiz quiz = data.getParcelableExtra(AnswerQuizActivity.ARGS_QUIZ_KEY);
-                    if (quiz != null) {
-                        mAdapter.replaceClassMaterial(quiz);
+                    Meeting meeting = data.getParcelableExtra(AnswerQuizActivity.ARGS_QUIZ_KEY);
+                    if (meeting != null) {
+                        mAdapter.replaceClassMaterial(meeting);
                     }
                 }
         }
@@ -132,7 +121,7 @@ public class StudentQuizFragment extends SWDBaseFragment implements
                 return;
             case ERROR:
                 Toast.makeText(getContext(), "Anda sudah submit kehadiran!", Toast.LENGTH_SHORT).show();
-                downloadQuiz((Quiz) classMaterial);
+                downloadQuiz((Meeting) classMaterial);
                 //Toast.makeText(getContext(), "name"+classMaterial.getName(), Toast.LENGTH_SHORT).show();
                 //Quiz quiz = sManager.updateQuiz();
                 //classMaterial.getName();
@@ -243,10 +232,10 @@ public class StudentQuizFragment extends SWDBaseFragment implements
         if (e instanceof DownloadException) {
             DownloadException downloadException = (DownloadException) e;
             ClassMaterial classMaterial = downloadException.getClassMaterial();
-            if (classMaterial instanceof Quiz) {
-                Quiz quiz = (Quiz) classMaterial;
-                sManager.updateQuizStatus(quiz, downloadException.getInitialStatus());
-                mAdapter.replaceClassMaterial(quiz);
+            if (classMaterial instanceof Meeting) {
+                Meeting meeting = (Meeting) classMaterial;
+                sManager.updateQuizStatus(meeting, downloadException.getInitialStatus());
+                mAdapter.replaceClassMaterial(meeting);
             }
             if (getContext() != null) {
                 Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
@@ -258,7 +247,7 @@ public class StudentQuizFragment extends SWDBaseFragment implements
     // endregion
 
     private void answerQuiz(ClassMaterial classMaterial) {
-        final Quiz quiz = (Quiz) classMaterial;
+        final Meeting meeting = (Meeting) classMaterial;
 
         //Intent intent = new Intent(getActivity(), AnswerQuizActivity.class);
         //intent.putExtra(AnswerQuizActivity.ARGS_QUIZ_KEY, (Parcelable) quiz);
@@ -293,7 +282,7 @@ public class StudentQuizFragment extends SWDBaseFragment implements
                 }).create();
 
 
-        if(quiz.isAnswered()==false){
+        if(meeting.isAnswered()==false){
             final Dialog dialog = new AlertDialog.Builder(getContext())
                     .setTitle("Submit Kehadiran")
                     .setMessage("NIM : "+mPref.getNIM()+"\nNama : " + mPref.getName())
@@ -307,14 +296,14 @@ public class StudentQuizFragment extends SWDBaseFragment implements
                                     //question.setQuestion(NIM.getText().toString());
                                     //question.setCorrectAnswer(NAME.getText().toString());
                                     //quiz.getQuestions().add(question);
-                            ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), null, quiz);
-                            task.execute(TeacherThread.Request.NIMNAMA, quiz.getName(), mPref.getNIM(), mPref.getName());
+                            ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), null, meeting);
+                            task.execute(TeacherThread.Request.NIMNAMA, meeting.getName(), mPref.getNIM(), mPref.getName());
 
                                     /*quiz.setAnswered(true);
                                     sManager.updateQuizAnswers(quiz);
                                     mAdapter.setClassMaterials(sManager.getQuizzes());*/
                                     //dialog3.show();
-                                    downloadQuiz(quiz);
+                                    downloadQuiz(meeting);
                                     //downloadQuiz((Quiz) classMaterial);
 
 
@@ -334,18 +323,18 @@ public class StudentQuizFragment extends SWDBaseFragment implements
         }
     }
 
-    private void downloadQuiz(final Quiz quiz) {
+    private void downloadQuiz(final Meeting meeting) {
         if (!sManager.isOffline()) {
-            ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), this, quiz);
-            task.execute(TeacherThread.Request.QUIZ, quiz.getName());
-            sManager.updateQuizStatus(quiz, ClassMaterial.Status.DOWNLOADING);
-            quiz.setAnswered(true);
-            sManager.updateQuizAnswers(quiz);
+            ClassMaterialsRequestTask task = new ClassMaterialsRequestTask(sManager.getTeacherAddress(), this, meeting);
+            task.execute(TeacherThread.Request.QUIZ, meeting.getName());
+            sManager.updateQuizStatus(meeting, ClassMaterial.Status.DOWNLOADING);
+            meeting.setAnswered(true);
+            sManager.updateQuizAnswers(meeting);
             mAdapter.setClassMaterials(sManager.getQuizzes());
-            if(quiz.isAnswered()==false){
-                quiz.setAnswered(true);
-                Quiz submit = sManager.updateQuiz(quiz);
-                sManager.updateQuizAnswers(quiz);
+            if(meeting.isAnswered()==false){
+                meeting.setAnswered(true);
+                Meeting submit = sManager.updateQuiz(meeting);
+                sManager.updateQuizAnswers(meeting);
                 mAdapter.setClassMaterials(sManager.getQuizzes());
             }
 
@@ -357,44 +346,4 @@ public class StudentQuizFragment extends SWDBaseFragment implements
         }
     }
 
-    private void resetAnswer(final Quiz quiz, final int index) {
-        new AlertDialog.Builder(getContext())
-                .setTitle(R.string.option_reset_answer)
-                .setMessage(R.string.dialog_reset_answer_message)
-                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sManager.resetQuizAnswer(quiz);
-                        mAdapter.notifyItemChanged(index);
-                        mAdapter.replaceClassMaterial(quiz);
-                    }
-                })
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .show();
-    }
-
-    private void deleteQuiz(final Quiz quiz, final int index) {
-        new AlertDialog.Builder(getContext())
-                .setTitle(R.string.dialog_delete_quiz_title)
-                .setMessage(R.string.delete_quiz_dialog_message)
-                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mAdapter.removeClassMaterial(index);
-                        sManager.deleteQuiz(quiz);
-                    }
-                })
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .show();
-    }
 }

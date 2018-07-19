@@ -1,6 +1,6 @@
 package com.sunway.averychoke.studywifidirect3.controller.student_class.study_material;
 
-import android.app.Dialog;
+
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;

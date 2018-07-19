@@ -5,18 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.sunway.averychoke.studywifidirect3.databinding.CellQuestionBinding;
-import com.sunway.averychoke.studywifidirect3.model.Question;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
 
 /**
  * Created by AveryChoke on 4/4/2017.
  */
 
-public class QuestionViewHolder extends RecyclerView.ViewHolder implements HasQuestion {
+public class MahasiswaViewHolder extends RecyclerView.ViewHolder implements HasMahasiswa {
 
     private CellQuestionBinding mBinding;
-    private Question mQuestion;
+    private Mahasiswa mMahasiswa;
 
-    public QuestionViewHolder(View itemView) {
+    public MahasiswaViewHolder(View itemView) {
         super(itemView);
 
         mBinding = DataBindingUtil.bind(itemView);
@@ -27,13 +27,13 @@ public class QuestionViewHolder extends RecyclerView.ViewHolder implements HasQu
 
 
     @Override
-    public void setQuestion(Question question, int lastIndex) {
-        mQuestion = question;
+    public void setMahasiswa(Mahasiswa mahasiswa, int lastIndex) {
+        mMahasiswa = mahasiswa;
 
 
-        if (question != null) {
-            mBinding.NIM.setText(question.getQuestion());
-            mBinding.NAMA.setText(question.getCorrectAnswer());
+        if (mahasiswa != null) {
+            mBinding.NIM.setText(mahasiswa.getMahasiswa());
+            mBinding.NAMA.setText(mahasiswa.getCorrectAnswer());
         }
     }
 
@@ -43,8 +43,8 @@ public class QuestionViewHolder extends RecyclerView.ViewHolder implements HasQu
         return mBinding;
     }
 
-    protected Question getQuestion() {
-        return mQuestion;
+    protected Mahasiswa getMahasiswa() {
+        return mMahasiswa;
     }
     // endregion
 }

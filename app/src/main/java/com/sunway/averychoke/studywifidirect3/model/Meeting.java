@@ -11,44 +11,44 @@ import java.util.List;
  * Created by AveryChoke on 27/1/2017.
  */
 
-public class Quiz extends ClassMaterial implements Parcelable, Serializable {
-    private List<Question> mQuestions;
+public class Meeting extends ClassMaterial implements Parcelable, Serializable {
+    private List<Mahasiswa> mMahasiswa;
     private boolean mAnswered;
     private int mVersion;
 
-    public Quiz(String name) {
+    public Meeting(String name) {
         super(name, false);
-        mQuestions = new ArrayList<>();
+        mMahasiswa = new ArrayList<>();
         mAnswered = false;
         mVersion = 1;
     }
 
     //for database
-    public Quiz(long quizId, String name, List<Question> questions, boolean answered, int version, boolean visible) {
-        super(quizId, name, visible);
+    public Meeting(long meetingId, String name, List<Mahasiswa> mahasiswas, boolean answered, int version, boolean visible) {
+        super(meetingId, name, visible);
         mAnswered = answered;
-        mQuestions = questions;
+        mMahasiswa = mahasiswas;
         mVersion = version;
     }
 
-    public void update(Quiz quiz) {
-        mQuestions.clear();
-        mQuestions.addAll(quiz.getQuestions());
-        resetQuestionsId();
+    public void update(Meeting meeting) {
+        mMahasiswa.clear();
+        mMahasiswa.addAll(meeting.getMahasiswa());
+        resetMahasiswaId();
 
         setStatus(Status.NORMAL);
-        mVersion = quiz.mVersion;
+        mVersion = meeting.mVersion;
     }
 
     public void resetId() {
         updateId();
-        resetQuestionsId();
+        resetMahasiswaId();
     }
 
-    private void resetQuestionsId() {
+    private void resetMahasiswaId() {
         //mAnswered = false;
-        for (Question question : mQuestions) {
-            question.resetId();
+        for (Mahasiswa mahasiswa : mMahasiswa) {
+            mahasiswa.resetId();
         }
     }
 
@@ -58,13 +58,13 @@ public class Quiz extends ClassMaterial implements Parcelable, Serializable {
     }
 
     // region get set
-    public List<Question> getQuestions()
+    public List<Mahasiswa> getMahasiswa()
     {
-        return mQuestions;
+        return mMahasiswa;
     }
 
-    public void setQuestions(List<Question> questions) {
-        mQuestions = questions;
+    public void setQuestions(List<Mahasiswa> mahasiswa) {
+        mMahasiswa = mahasiswa;
     }
 
     public boolean isAnswered() {
@@ -96,24 +96,24 @@ public class Quiz extends ClassMaterial implements Parcelable, Serializable {
         out.writeInt(isVisible() ? 1 : 0); // cannot write as boolean so change to int instead
         out.writeSerializable(getStatus());
 
-        out.writeList(mQuestions);
+        out.writeList(mMahasiswa);
         out.writeInt(mAnswered ? 1 : 0);
         out.writeInt(mVersion);
     }
 
-    public static final Parcelable.Creator<Quiz> CREATOR = new Parcelable.Creator<Quiz>() {
-        public Quiz createFromParcel(Parcel in) {
-            return new Quiz(in);
+    public static final Parcelable.Creator<Meeting> CREATOR = new Parcelable.Creator<Meeting>() {
+        public Meeting createFromParcel(Parcel in) {
+            return new Meeting(in);
         }
 
-        public Quiz[] newArray(int size) {
-            return new Quiz[size];
+        public Meeting[] newArray(int size) {
+            return new Meeting[size];
         }
     };
 
-    private Quiz(Parcel in) {
+    private Meeting(Parcel in) {
         super(in.readLong(), in.readString(), in.readInt() != 0, (Status)in.readSerializable());
-        mQuestions = in.readArrayList(Question.class.getClassLoader());
+        mMahasiswa = in.readArrayList(Mahasiswa.class.getClassLoader());
         mAnswered = in.readInt() != 0;
         mVersion = in.readInt();
     }

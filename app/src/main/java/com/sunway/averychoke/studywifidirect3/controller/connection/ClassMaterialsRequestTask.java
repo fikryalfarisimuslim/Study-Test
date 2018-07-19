@@ -1,18 +1,14 @@
 package com.sunway.averychoke.studywifidirect3.controller.connection;
 
 import android.os.AsyncTask;
-
-import com.sunway.averychoke.studywifidirect3.controller.SWDBaseActivity;
 import com.sunway.averychoke.studywifidirect3.manager.BaseManager;
 import com.sunway.averychoke.studywifidirect3.manager.StudentManager;
 import com.sunway.averychoke.studywifidirect3.model.ClassMaterial;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 import com.sunway.averychoke.studywifidirect3.model.StudyMaterial;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +32,6 @@ public class ClassMaterialsRequestTask extends AsyncTask<Serializable, Long, Cla
     private static final int BUFFER_SIZE = 4 * 1024;
 
     private String mAddress;
-    private Quiz mQuiz;
     private ClassMaterialsUpdaterListener mListener;
     private ClassMaterialProgressListener mProgressListener;
     private ClassMaterial mDownloadClassMaterial;  // the request material
@@ -159,12 +154,12 @@ public class ClassMaterialsRequestTask extends AsyncTask<Serializable, Long, Cla
     private void updateManager(Result result, ObjectInputStream ois) throws IOException, ClassNotFoundException, DownloadException, NullPointerException {
         switch (result) {
             case QUIZZES:
-                List<Quiz> quizzes = (List<Quiz>) ois.readObject();
-                sManager.updateQuizzes(quizzes);
+                List<Meeting> meetingz = (List<Meeting>) ois.readObject();
+                sManager.updateMeetingz(meetingz);
                 break;
             case QUIZ:
-                Quiz quiz = (Quiz) ois.readObject();
-                mClassMaterial = sManager.updateQuiz(quiz);
+                Meeting meeting = (Meeting) ois.readObject();
+                mClassMaterial = sManager.updateQuiz(meeting);
                 break;
             case STUDY_MATERIALS:
                 List<String> studyMaterialsName = (List<String>) ois.readObject();

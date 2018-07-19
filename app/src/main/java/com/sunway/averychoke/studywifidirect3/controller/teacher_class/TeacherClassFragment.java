@@ -23,8 +23,8 @@ import com.sunway.averychoke.studywifidirect3.controller.teacher_class.quiz.Teac
 import com.sunway.averychoke.studywifidirect3.controller.teacher_class.study_material.TeacherStudyMaterialFragment;
 import com.sunway.averychoke.studywifidirect3.databinding.FragmentClassBinding;
 import com.sunway.averychoke.studywifidirect3.manager.TeacherManager;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,22 +97,22 @@ public class TeacherClassFragment extends SWDBaseFragment {
                         .show();
                 return true;
             case R.id.rekap:
-                List<Quiz> quiz = sManager.getQuizzes();
+                List<Meeting> meeting = sManager.getQuizzes();
                 StringBuffer buffer = new StringBuffer();
                 List<String> NIM = new ArrayList<String>();
                 List<String> Nama = new ArrayList<String>();
                 List<Integer> Jumlah = new ArrayList<Integer>();
                 Integer status = 0;
 
-                for (int i=0; i<quiz.size(); i++) {
-                    List<Question> question = quiz.get(i).getQuestions();
-                    for (int j=0; j<question.size(); j++) {
+                for (int i=0; i<meeting.size(); i++) {
+                    List<Mahasiswa> mahasiswa = meeting.get(i).getMahasiswa();
+                    for (int j=0; j<mahasiswa.size(); j++) {
                         Integer jumlahData = NIM.size();
                         status = 0;
                         int k = 0;
                         while(k<jumlahData && status == 0){
                             //jika data sudah ada
-                            if(NIM.get(k).toString().equals(question.get(j).getQuestion())){
+                            if(NIM.get(k).toString().equals(mahasiswa.get(j).getMahasiswa())){
                                 Integer value = Jumlah.get(k) + 1;
                                 Jumlah.set(k,value);
                                 if(Nama.get(k).toString().equals("")){
@@ -126,8 +126,8 @@ public class TeacherClassFragment extends SWDBaseFragment {
 
                         //add data baru
                         if(jumlahData == 0 || status == 0){
-                            NIM.add(question.get(j).getQuestion());
-                            Nama.add(question.get(j).getCorrectAnswer());
+                            NIM.add(mahasiswa.get(j).getMahasiswa());
+                            Nama.add(mahasiswa.get(j).getCorrectAnswer());
                             Jumlah.add(1);
                         }
                     }

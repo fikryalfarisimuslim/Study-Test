@@ -8,7 +8,7 @@ import com.sunway.averychoke.studywifidirect3.R;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseActivity;
 import com.sunway.averychoke.studywifidirect3.database.DatabaseHelper;
 import com.sunway.averychoke.studywifidirect3.databinding.ActivityMainContainerBinding;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 
 /**
  * Created by AveryChoke on 6/4/2017.
@@ -29,13 +29,13 @@ public class ViewQuizActivity extends SWDBaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        Quiz quiz = getIntent().getParcelableExtra(ARGS_QUIZ_KEY);
+        Meeting meeting = getIntent().getParcelableExtra(ARGS_QUIZ_KEY);
 
 
-        if (quiz != null) {
-            setTitle(quiz.getName());
+        if (meeting != null) {
+            setTitle(meeting.getName());
             getSupportFragmentManager().beginTransaction()
-                    .add(mBinding.containerLayout.getId(), ViewQuizFragment.newInstance(quiz), ViewQuizFragment.class.getSimpleName())
+                    .add(mBinding.containerLayout.getId(), ViewQuizFragment.newInstance(meeting), ViewQuizFragment.class.getSimpleName())
                     .commit();
         }
     }

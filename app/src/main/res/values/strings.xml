@@ -94,7 +94,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="slide_1_title"> Home Page </string>
-    <string name="slide_1_desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </string>
+    <string name="slide_1_title"> Membuat Kelas </string>
+    <string name="slide_1_desc"> Pengelolaan kelas dilakukan dibagian ini seperti membuat kelas, melihat kelas dan menghapus kelas. </string>
+
+    <string name="slide_2_title"> Presensi </string>
+    <string name="slide_2_desc"> Ketika melakukan presensi Dosen harus ada di menu ini. Centang pertemuan yang sedang dilakukan. </string>
+
+    <string name="slide_3_title"> Berbagi File/PPT/PDF </string>
+    <string name="slide_3_desc"> Klik tombol (+) jika ingin berbagi file dengan mahasiswa dan centang file yang ingin dibagikan. </string>
 
 </resources>

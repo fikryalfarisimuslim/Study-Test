@@ -5,7 +5,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Environment;
 
 import com.sunway.averychoke.studywifidirect3.database.DatabaseHelper;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 import com.sunway.averychoke.studywifidirect3.model.StudyClass;
 import com.sunway.averychoke.studywifidirect3.model.StudyMaterial;
 
@@ -53,14 +53,14 @@ public class BaseManager {
     }
 
     // region Quiz
-    public List<Quiz> getQuizzes() {
-        return mStudyClass != null ?  mStudyClass.getQuizzes() : new ArrayList<Quiz>();
+    public List<Meeting> getQuizzes() {
+        return mStudyClass != null ?  mStudyClass.getMeetingz() : new ArrayList<Meeting>();
     }
 
-    public void deleteQuiz(Quiz quiz) {
+    public void deleteMeeting(Meeting meeting) {
         if (mDatabase != null && mStudyClass != null) {
-            mDatabase.deleteClassMaterial(quiz);
-            mStudyClass.getQuizzes().remove(quiz);
+            mDatabase.deleteClassMaterial(meeting);
+            mStudyClass.getMeetingz().remove(meeting);
         }
     }
     // endregion

@@ -2,10 +2,8 @@ package com.sunway.averychoke.studywifidirect3.controller;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.sunway.averychoke.studywifidirect3.R;
 import com.sunway.averychoke.studywifidirect3.util.PreferenceHelper;

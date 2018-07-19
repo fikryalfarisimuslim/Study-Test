@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 import com.sunway.averychoke.studywifidirect3.R;
 import com.sunway.averychoke.studywifidirect3.controller.SWDBaseFragment;
-import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.QuestionsAdapter;
+import com.sunway.averychoke.studywifidirect3.controller.common_class.quiz.MahasiswaAdapter;
 import com.sunway.averychoke.studywifidirect3.databinding.FragmentViewQuizBinding;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 
 /**
  * Created by AveryChoke on 6/4/2017.
@@ -24,12 +24,12 @@ public class ViewQuizFragment extends SWDBaseFragment {
 
     private FragmentViewQuizBinding mBinding;
 
-    private Quiz mQuiz;
-    private QuestionsAdapter mAdapter;
+    private Meeting mMeeting;
+    private MahasiswaAdapter mAdapter;
 
-    public static ViewQuizFragment newInstance(Quiz quiz) {
+    public static ViewQuizFragment newInstance(Meeting meeting) {
         Bundle args = new Bundle();
-        args.putParcelable(ARGS_QUIZ_KEY, quiz);
+        args.putParcelable(ARGS_QUIZ_KEY, meeting);
         
         ViewQuizFragment fragment = new ViewQuizFragment();
         fragment.setArguments(args);
@@ -40,12 +40,12 @@ public class ViewQuizFragment extends SWDBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mQuiz = getArguments().getParcelable(ARGS_QUIZ_KEY);
+        mMeeting = getArguments().getParcelable(ARGS_QUIZ_KEY);
         // reset answers
-        for (Question question : mQuiz.getQuestions()) {
-            question.setUserAnswer("");
+        for (Mahasiswa mahasiswa : mMeeting.getMahasiswa()) {
+            mahasiswa.setUserAnswer("");
         }
-        mAdapter = new QuestionsAdapter();
+        mAdapter = new MahasiswaAdapter();
     }
 
     @Override
@@ -61,6 +61,6 @@ public class ViewQuizFragment extends SWDBaseFragment {
 
         mBinding.questionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.questionsRecyclerView.setAdapter(mAdapter);
-        mAdapter.setQuestions(mQuiz.getQuestions());
+        mAdapter.setMahasiswa(mMeeting.getMahasiswa());
     }
 }

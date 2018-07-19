@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import com.sunway.averychoke.studywifidirect3.model.*;
 
 import java.util.ArrayList;
@@ -26,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "study_app.db";
+    private static final String DATABASE_NAME = "presence.db";
 
     // region Class Table
     private static final String TABLE_CLASS = "class";
@@ -56,37 +53,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // endregion Class Material Table
 
     // region Quiz Table
-    private static final String TABLE_QUIZ = "quiz";
+    private static final String TABLE_MEETING = "meeting";
     // columns names
-    private static final String QUIZ_ID = "id";
-    private static final String QUIZ_ANSWERED = "answered";
-    private static final String QUIZ_VERSION = "version";
+    private static final String MEETING_ID = "id";
+    private static final String MEETING_ANSWERED = "answered";
+    private static final String MEETING_VERSION = "version";
     //create table statement
-    private static final String CREATE_TABLE_QUIZ =
-            "CREATE TABLE " + TABLE_QUIZ + "("
-                    + QUIZ_ID + " INTEGER PRIMARY KEY,"
-                    + QUIZ_ANSWERED + " BOOLEAN,"
-                    + QUIZ_VERSION + " INTEGER,"
-                    + "FOREIGN KEY(" + QUIZ_ID + ") REFERENCES " + TABLE_CLASS_MATERIAL + "(" + CLASS_MATERIAL_ID + ") ON DELETE CASCADE)";
+    private static final String CREATE_TABLE_MEETING =
+            "CREATE TABLE " + TABLE_MEETING + "("
+                    + MEETING_ID + " INTEGER PRIMARY KEY,"
+                    + MEETING_ANSWERED + " BOOLEAN,"
+                    + MEETING_VERSION + " INTEGER,"
+                    + "FOREIGN KEY(" + MEETING_ID + ") REFERENCES " + TABLE_CLASS_MATERIAL + "(" + CLASS_MATERIAL_ID + ") ON DELETE CASCADE)";
     // endregion Quiz Table
 
     // region Question Table
-    private static final String TABLE_QUESTION = "question_table";
+    private static final String TABLE_MAHASISWA = "mahasiswa_table";
     //columns name
-    private static final String QUESTION_ID = "id";
-    private static final String QUESTION_QUIZ_ID = "quiz_id";
-    private static final String QUESTION_QUESTION = "question";
-    private static final String QUESTION_CORRECT_ANSWER = "correct_answer";
-    private static final String QUESTION_USER_ANSWER = "user_answer";
+    private static final String MAHASISWA_ID = "id";
+    private static final String MAHASISWA_PRESENCE_ID = "presence_id";
+    private static final String MAHASISWA_MAHASISWA = "mahasiswa";
+    private static final String MAHASISWA_CORRECT_ANSWER = "correct_answer";
+    private static final String MAHASISWA_USER_ANSWER = "user_answer";
     //create table statement
-    private static final String CREATE_TABLE_QUESTION =
-            "CREATE TABLE " + TABLE_QUESTION + "("
-                    + QUESTION_ID + " INTEGER PRIMARY KEY,"
-                    + QUESTION_QUIZ_ID + " INTEGER NOT NULL,"
-                    + QUESTION_QUESTION + " TEXT,"
-                    + QUESTION_CORRECT_ANSWER + " TEXT,"
-                    + QUESTION_USER_ANSWER + " TEXT,"
-                    + "FOREIGN KEY(" + QUESTION_QUIZ_ID + ") REFERENCES " + TABLE_QUIZ + "(" + QUIZ_ID + ") ON DELETE CASCADE)";
+    private static final String CREATE_TABLE_MAHASISWA =
+            "CREATE TABLE " + TABLE_MAHASISWA + "("
+                    + MAHASISWA_ID + " INTEGER PRIMARY KEY,"
+                    + MAHASISWA_PRESENCE_ID + " INTEGER NOT NULL,"
+                    + MAHASISWA_MAHASISWA + " TEXT,"
+                    + MAHASISWA_CORRECT_ANSWER + " TEXT,"
+                    + MAHASISWA_USER_ANSWER + " TEXT,"
+                    + "FOREIGN KEY(" + MAHASISWA_PRESENCE_ID + ") REFERENCES " + TABLE_MEETING + "(" + MEETING_ID + ") ON DELETE CASCADE)";
     // endregion Question Table
 
 
@@ -117,8 +114,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_CLASS);
         db.execSQL(CREATE_TABLE_CLASS_MATERIAL);
-        db.execSQL(CREATE_TABLE_QUIZ);
-        db.execSQL(CREATE_TABLE_QUESTION);
+        db.execSQL(CREATE_TABLE_MEETING);
+        db.execSQL(CREATE_TABLE_MAHASISWA);
         db.execSQL(CREATE_TABLE_STUDY_MATERIAL);
         //db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES (null, 1, 1401456,'Fikry Al Farisi Muslim')");
         //db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES (null, 1, 1111111,'Al Fikhan')");
@@ -130,8 +127,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASS_MATERIAL);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUIZ);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEETING);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAHASISWA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDY_MATERIAL);
 
         // Create tables again
@@ -158,8 +155,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long id = db.insert(TABLE_CLASS, null, values);
 
         // insert quizzes
-        for (Quiz quiz : studyClass.getQuizzes()) {
-            addQuiz(quiz, studyClass.getName());
+        for (Meeting meeting : studyClass.getMeetingz()) {
+            addMeeting(meeting, studyClass.getName());
         }
         //insert study materials
         for (StudyMaterial studyMaterial : studyClass.getStudyMaterials()) {
@@ -216,10 +213,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (c.moveToFirst()) {
                 try {
                     String className = c.getString(c.getColumnIndex(CLASS_NAME));
-                    List<Quiz> quizzes = getClassQuizzes(className);
+                    List<Meeting> meetingz = getClassMeetingz(className);
                     List<StudyMaterial> studyMaterials = getClassStudyMaterials(className);
 
-                    studyClass = new StudyClass(className, quizzes, studyMaterials);
+                    studyClass = new StudyClass(className, meetingz, studyMaterials);
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -235,16 +232,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return studyClass;
     }
 
-    public void updateClassQuizzes(StudyClass studyClass) {
+    public void updateClassMeetingz(StudyClass studyClass) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
         // clear previous quizzes
-        clearClassQuizzes(studyClass.getName());
+        clearClassMeetingz(studyClass.getName());
 
         // insert new quizzes
-        for (Quiz quiz : studyClass.getQuizzes()) {
-            addQuiz(quiz, studyClass.getName());
+        for (Meeting meeting : studyClass.getMeetingz()) {
+            addMeeting(meeting, studyClass.getName());
         }
 
         db.setTransactionSuccessful();
@@ -311,28 +308,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // endregion Class Material Table
 
     // region Quiz Table
-    public long addQuiz(Quiz quiz, String className) {
+    public long addMeeting(Meeting meeting, String className) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
         // insert superclass
-        addClassMaterial(quiz, className);
+        addClassMaterial(meeting, className);
 
         ContentValues values = new ContentValues();
-        values.put(QUIZ_ID, quiz.getId());
-        values.put(QUIZ_ANSWERED, quiz.isAnswered());
-        values.put(QUIZ_VERSION, quiz.getVersion());
+        values.put(MEETING_ID, meeting.getId());
+        values.put(MEETING_ANSWERED, meeting.isAnswered());
+        values.put(MEETING_VERSION, meeting.getVersion());
 
         // insert row
-        long id = db.insert(TABLE_QUIZ, null, values);
+        long id = db.insert(TABLE_MEETING, null, values);
 
         //insert questions
-        for(Question question : quiz.getQuestions()) {
+        for(Mahasiswa mahasiswa : meeting.getMahasiswa()) {
         /*Question question = new Question();
         question.setQuestion("1401456");
         question.setCorrectAnswer("Fikry");
         question.setUserAnswer("");*/
-            addQuestion(question, quiz.getId());
+            addMahasiswa(mahasiswa, meeting.getId());
         }
 
 
@@ -342,12 +339,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // get the quizzes based on the class name
-    public List<Quiz> getClassQuizzes(String className) {
-        List<Quiz> quizzes = new ArrayList<>();
+    public List<Meeting> getClassMeetingz(String className) {
+        List<Meeting> meetingz = new ArrayList<>();
         String selectQuery =
-                "SELECT " + TABLE_CLASS_MATERIAL + ".*," + TABLE_QUIZ + ".*"
-                        + " FROM " + TABLE_CLASS_MATERIAL + "," + TABLE_QUIZ
-                        + " WHERE " + TABLE_CLASS_MATERIAL + "." + CLASS_MATERIAL_ID + "=" + TABLE_QUIZ + "." + QUIZ_ID
+                "SELECT " + TABLE_CLASS_MATERIAL + ".*," + TABLE_MEETING + ".*"
+                        + " FROM " + TABLE_CLASS_MATERIAL + "," + TABLE_MEETING
+                        + " WHERE " + TABLE_CLASS_MATERIAL + "." + CLASS_MATERIAL_ID + "=" + TABLE_MEETING + "." + MEETING_ID
                         + " AND " + TABLE_CLASS_MATERIAL + "." + CLASS_MATERIAL_CLASS_NAME + " =?";
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -360,23 +357,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 do {
                     try {
                         long classMaterialId = c.getLong(c.getColumnIndex(CLASS_MATERIAL_ID));
-                        List<Question> quizQuestions = getQuizQuestions(classMaterialId);
-                        Quiz quiz = new Quiz(
+                        List<Mahasiswa> meetingMahasiswa = getMeetingMahasiswa(classMaterialId);
+                        Meeting meeting = new Meeting(
                                 classMaterialId,
                                 c.getString(c.getColumnIndex(CLASS_MATERIAL_NAME)),
-                                quizQuestions,
-                                c.getInt(c.getColumnIndex(QUIZ_ANSWERED)) != 0,
-                                c.getInt(c.getColumnIndex(QUIZ_VERSION)),
+                                meetingMahasiswa,
+                                c.getInt(c.getColumnIndex(MEETING_ANSWERED)) != 0,
+                                c.getInt(c.getColumnIndex(MEETING_VERSION)),
                                 c.getInt(c.getColumnIndex(CLASS_MATERIAL_VISIBLE)) != 0
                         );
 
-                        quizzes.add(quiz);
+                        meetingz.add(meeting);
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
                 } while (c.moveToNext());
             }
-            return quizzes;
+            return meetingz;
         }
         finally {
             if(c != null) {
@@ -385,49 +382,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int updateQuiz(Quiz quiz) {
+    public int updateMeeting(Meeting meeting) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
         // update superclass
-        updateClassMaterial(quiz);
+        updateClassMaterial(meeting);
 
         ContentValues values = new ContentValues();
-        values.put(QUIZ_ANSWERED, quiz.isAnswered());
-        values.put(QUIZ_VERSION, quiz.getVersion());
+        values.put(MEETING_ANSWERED, meeting.isAnswered());
+        values.put(MEETING_VERSION, meeting.getVersion());
 
         //update the question list
         //clearQuizQuestion(quiz.getId());
-        for(Question question : quiz.getQuestions()) {
+        for(Mahasiswa mahasiswa : meeting.getMahasiswa()) {
 
-                addQuestion(question, quiz.getId());
+                addMahasiswa(mahasiswa, meeting.getId());
 
         }
 
         // updating row
-        int id = db.update(TABLE_QUIZ, values, QUIZ_ID + " = ?",
-                new String[] { String.valueOf(quiz.getId()) });
+        int id = db.update(TABLE_MEETING, values, MEETING_ID + " = ?",
+                new String[] { String.valueOf(meeting.getId()) });
 
         db.setTransactionSuccessful();
         db.endTransaction();
         return id;
     }
 
-    public int updateQuizAnswers(Quiz quiz) {
+    public int updateQuizAnswers(Meeting meeting) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
         ContentValues values = new ContentValues();
-        values.put(QUIZ_ANSWERED, quiz.isAnswered());
+        values.put(MEETING_ANSWERED, meeting.isAnswered());
 
         // update questions
-        for (Question question : quiz.getQuestions()) {
-            updateQuestionAnswer(question);
+        for (Mahasiswa mahasiswa : meeting.getMahasiswa()) {
+            updateQuestionAnswer(mahasiswa);
         }
 
         // updating row
-        int id = db.update(TABLE_QUIZ, values, QUIZ_ID + " = ?",
-                new String[] { String.valueOf(quiz.getId()) });
+        int id = db.update(TABLE_MEETING, values, MEETING_ID + " = ?",
+                new String[] { String.valueOf(meeting.getId()) });
 
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -435,13 +432,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // delete all quizzes that belong to the class
-    private void clearClassQuizzes(String className) {
+    private void clearClassMeetingz(String className) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String whereString = CLASS_MATERIAL_ID + " in ("
                 + "SELECT " + TABLE_CLASS_MATERIAL + "." + CLASS_MATERIAL_ID
-                + " FROM " + TABLE_CLASS_MATERIAL + "," + TABLE_QUIZ
-                + " WHERE " + TABLE_CLASS_MATERIAL + "." + CLASS_MATERIAL_ID + " = " +  TABLE_QUIZ + "." + QUIZ_ID
+                + " FROM " + TABLE_CLASS_MATERIAL + "," + TABLE_MEETING
+                + " WHERE " + TABLE_CLASS_MATERIAL + "." + CLASS_MATERIAL_ID + " = " +  TABLE_MEETING + "." + MEETING_ID
                 + " AND " + CLASS_MATERIAL_CLASS_NAME + " = ? )";
 
         db.delete(TABLE_CLASS_MATERIAL, whereString,
@@ -450,27 +447,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // endregion Quiz Table
 
     // region Question Table
-    public long addQuestion(Question question, long quizId) {
+    public long addMahasiswa(Mahasiswa mahasiswa, long meetingId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(QUESTION_ID, question.getId());
-        values.put(QUESTION_QUIZ_ID, quizId);
-        values.put(QUESTION_QUESTION, question.getQuestion());
-        values.put(QUESTION_CORRECT_ANSWER, question.getCorrectAnswer());
-        values.put(QUESTION_USER_ANSWER, question.getUserAnswer());
+        values.put(MAHASISWA_ID, mahasiswa.getId());
+        values.put(MAHASISWA_PRESENCE_ID, meetingId);
+        values.put(MAHASISWA_MAHASISWA, mahasiswa.getMahasiswa());
+        values.put(MAHASISWA_CORRECT_ANSWER, mahasiswa.getCorrectAnswer());
+        values.put(MAHASISWA_USER_ANSWER, mahasiswa.getUserAnswer());
 
         // insert row
-        long id = db.insert(TABLE_QUESTION, null, values);
+        long id = db.insert(TABLE_MAHASISWA, null, values);
 
         return id;
     }
 
-    public Question getQuestion(long id) {
-        Question question = null;
+    public Mahasiswa getMahasiswa(long id) {
+        Mahasiswa mahasiswa = null;
         String selectQuery =
-                "SELECT * FROM " + TABLE_QUESTION
-                        + " WHERE " + QUESTION_ID + " =?";
+                "SELECT * FROM " + TABLE_MAHASISWA
+                        + " WHERE " + MAHASISWA_ID + " =?";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -480,11 +477,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             if (c.moveToFirst()) {
                 try {
-                    question = new Question(
-                            c.getLong(c.getColumnIndex(QUESTION_ID)),
-                            c.getString(c.getColumnIndex(QUESTION_QUESTION)),
-                            c.getString(c.getColumnIndex(QUESTION_CORRECT_ANSWER)),
-                            c.getString(c.getColumnIndex(QUESTION_USER_ANSWER))
+                    mahasiswa = new Mahasiswa(
+                            c.getLong(c.getColumnIndex(MAHASISWA_ID)),
+                            c.getString(c.getColumnIndex(MAHASISWA_MAHASISWA)),
+                            c.getString(c.getColumnIndex(MAHASISWA_CORRECT_ANSWER)),
+                            c.getString(c.getColumnIndex(MAHASISWA_USER_ANSWER))
                     );
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
@@ -498,16 +495,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 c.close();
             }
         }
-        return question;
+        return mahasiswa;
     }
 
     // get questions based on quiz id
-    public List<Question> getQuizQuestions(long quizId) {
-        List<Question> questions = new ArrayList<>();
+    public List<Mahasiswa> getMeetingMahasiswa(long quizId) {
+        List<Mahasiswa> mahasiswa = new ArrayList<>();
 
         String selectQuery =
-                "SELECT " + QUESTION_ID + " FROM " + TABLE_QUESTION
-                        + " WHERE " + QUESTION_QUIZ_ID + " =?";
+                "SELECT " + MAHASISWA_ID + " FROM " + TABLE_MAHASISWA
+                        + " WHERE " + MAHASISWA_PRESENCE_ID + " =?";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -519,16 +516,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (c.moveToFirst()) {
                 do {
                     try {
-                        long questionID = c.getLong(c.getColumnIndex(QUESTION_ID));
+                        long mahasiswaID = c.getLong(c.getColumnIndex(MAHASISWA_ID));
 
-                            questions.add(getQuestion(questionID));
+                            mahasiswa.add(getMahasiswa(mahasiswaID));
 
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
                 } while (c.moveToNext());
             }
-            return questions;
+            return mahasiswa;
         }
         finally {
             if(c != null)
@@ -538,40 +535,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int updateQuestion(Question question) {
+    public int updateQuestion(Mahasiswa mahasiswa) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(QUESTION_QUESTION, question.getQuestion());
-        values.put(QUESTION_CORRECT_ANSWER, question.getCorrectAnswer());
+        values.put(MAHASISWA_MAHASISWA, mahasiswa.getMahasiswa());
+        values.put(MAHASISWA_CORRECT_ANSWER, mahasiswa.getCorrectAnswer());
 
         // updating row
-        return db.update(TABLE_QUESTION, values, QUESTION_ID + " = ?",
-                new String[] { String.valueOf(question.getId()) });
+        return db.update(TABLE_MAHASISWA, values, MAHASISWA_ID + " = ?",
+                new String[] { String.valueOf(mahasiswa.getId()) });
     }
 
-    public int updateQuestionAnswer(Question question) {
+    public int updateQuestionAnswer(Mahasiswa mahasiswa) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(QUESTION_USER_ANSWER, question.getUserAnswer());
+        values.put(MAHASISWA_USER_ANSWER, mahasiswa.getUserAnswer());
 
         // updating row
-        return db.update(TABLE_QUESTION, values, QUESTION_ID + " = ?",
-                new String[] { String.valueOf(question.getId()) });
+        return db.update(TABLE_MAHASISWA, values, MAHASISWA_ID + " = ?",
+                new String[] { String.valueOf(mahasiswa.getId()) });
     }
 
     // delete all questions that a quiz has
     public void clearQuizQuestion(long quizId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(TABLE_QUESTION, QUESTION_QUIZ_ID + " = ?",
+        db.delete(TABLE_MAHASISWA, MAHASISWA_PRESENCE_ID + " = ?",
                 new String[] { String.valueOf(quizId)});
     }
 
-    public long getQuestionMaxId()
+    public long getMahasiswaMaxId()
     {
-        return getMaxId(QUESTION_ID, TABLE_QUESTION);
+        return getMaxId(MAHASISWA_ID, TABLE_MAHASISWA);
     }
     // endregion Question Table
 

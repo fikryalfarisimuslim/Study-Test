@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/intro_bg_img"
+        android:src="@drawable/intro_bg_img1"
         android:scaleType="centerCrop" />
 
     <RelativeLayout
@@ -22,7 +22,7 @@
             android:id="@+id/slide_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/slide_1"
+            android:src="@drawable/slide_2"
             android:layout_centerHorizontal="true" />
 
 
@@ -34,17 +34,11 @@
             android:layout_marginTop="10dp"
             android:layout_below="@+id/slide_cover">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_save"
-                android:tint="@color/colorPrimary"
-                android:layout_marginTop="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slide_1_title"
+                android:text="@string/slide_2_title"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/textColorSecondaryDark" />
@@ -52,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slide_1_desc"
+                android:text="@string/slide_2_desc"
                 android:padding="10dp"
                 android:textSize="14sp"
                 android:textAlignment="center"

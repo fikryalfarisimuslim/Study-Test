@@ -21,8 +21,8 @@ import com.sunway.averychoke.studywifidirect3.controller.SWDBaseFragment;
 import com.sunway.averychoke.studywifidirect3.controller.student_class.quiz.adapter.AnswerQuestionsAdapter;
 import com.sunway.averychoke.studywifidirect3.databinding.FragmentAnswerQuizBinding;
 import com.sunway.averychoke.studywifidirect3.manager.StudentManager;
-import com.sunway.averychoke.studywifidirect3.model.Question;
-import com.sunway.averychoke.studywifidirect3.model.Quiz;
+import com.sunway.averychoke.studywifidirect3.model.Mahasiswa;
+import com.sunway.averychoke.studywifidirect3.model.Meeting;
 
 /**
  * Created by AveryChoke on 2/4/2017.
@@ -34,12 +34,12 @@ public class AnswerQuizFragment extends SWDBaseFragment implements AnswerQuestio
     private FragmentAnswerQuizBinding mBinding;
 
     private StudentManager sManager;
-    private Quiz mQuiz;
+    private Meeting mMeeting;
     private AnswerQuestionsAdapter mAdapter;
 
-    public static AnswerQuizFragment newInstance(Quiz quiz) {
+    public static AnswerQuizFragment newInstance(Meeting meeting) {
         Bundle args = new Bundle();
-        args.putParcelable(ARGS_QUIZ_KEY, quiz);
+        args.putParcelable(ARGS_QUIZ_KEY, meeting);
 
         AnswerQuizFragment fragment = new AnswerQuizFragment();
         fragment.setArguments(args);
@@ -50,7 +50,7 @@ public class AnswerQuizFragment extends SWDBaseFragment implements AnswerQuestio
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mQuiz = getArguments().getParcelable(ARGS_QUIZ_KEY);
+        mMeeting = getArguments().getParcelable(ARGS_QUIZ_KEY);
         mAdapter = new AnswerQuestionsAdapter(this);
         sManager = StudentManager.getInstance();
     }
@@ -69,7 +69,7 @@ public class AnswerQuizFragment extends SWDBaseFragment implements AnswerQuestio
 
         mBinding.questionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.questionsRecyclerView.setAdapter(mAdapter);
-        mAdapter.setQuestions(mQuiz.getQuestions());
+        mAdapter.setMahasiswa(mMeeting.getMahasiswa());
     }
 
     @Override
@@ -88,26 +88,26 @@ public class AnswerQuizFragment extends SWDBaseFragment implements AnswerQuestio
                 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mQuiz.setAnswered(true);
-                        sManager.updateQuizAnswers(mQuiz);
-                        Question question = new Question();
-                        question.getId();
-                        question.setQuestion("1401456");
-                        question.setCorrectAnswer("Fikry");
-                        mQuiz.getQuestions().add(question);
+                        mMeeting.setAnswered(true);
+                        sManager.updateQuizAnswers(mMeeting);
+                        Mahasiswa mahasiswa = new Mahasiswa();
+                        mahasiswa.getId();
+                        mahasiswa.setMahasiswa("1401456");
+                        mahasiswa.setCorrectAnswer("Fikry");
+                        mMeeting.getMahasiswa().add(mahasiswa);
 
                         //Quiz wp = sManager.updateQuiz(mQuiz);
 
 
 
-                        Toast.makeText(getContext(), "Sukses bro " + mQuiz.getName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Sukses bro " + mMeeting.getName(), Toast.LENGTH_SHORT).show();
 
                         // return data to activity
                         Intent intent = new Intent();
-                        intent.putExtra(ARGS_QUIZ_KEY, (Parcelable) mQuiz);
+                        intent.putExtra(ARGS_QUIZ_KEY, (Parcelable) mMeeting);
                         getActivity().setResult(Activity.RESULT_OK, intent);
 
-                        getBaseActivity().changeFragment(QuizResultFragment.newInstance(mQuiz));
+                        getBaseActivity().changeFragment(QuizResultFragment.newInstance(mMeeting));
                     }
                 })
                 .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
