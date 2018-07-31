@@ -19,7 +19,7 @@ public class DownloadException extends Exception {
 
     @Override
     public String toString() {
-        return "Failed to download " + mClassMaterial.getName();
+        return "Gagal mengunduh " + mClassMaterial.getName();
     }
 
     // region Get Set

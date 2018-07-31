@@ -36,8 +36,8 @@
     <string name="option_view_quiz">View Quiz</string>
     <string name="option_edit_quiz">Edit Quiz</string>
     <string name="answer">Answer:</string>
-    <string name="dialog_connection_error_title">Connection Error</string>
-    <string name="dialog_connection_error_message">Unable to connect. Please restart your WiFi and try again later.</string>
+    <string name="dialog_connection_error_title">Koneksi Error</string>
+    <string name="dialog_connection_error_message">Tidak dapat terhubung. Harap restart Wi-Fi Anda dan coba lagi.</string>
     <string name="settings">Settings</string>
     <string name="connecting">Connecting</string>
     <string name="tab_quiz">Pertemuan</string>
@@ -103,4 +103,13 @@
     <string name="slide_3_title"> Berbagi File/PPT/PDF </string>
     <string name="slide_3_desc"> Klik tombol (+) jika ingin berbagi file dengan mahasiswa dan centang file yang ingin dibagikan. </string>
 
+
+    <string name="slide_11_title"> Mencari Kelas</string>
+    <string name="slide_11_desc"> Dengan menekan tombol ikon (mencari) di pojok kanan atas. </string>
+
+    <string name="slide_22_title"> Presensi </string>
+    <string name="slide_22_desc"> Ketika melakukan presensi tekan di pertemuan yang tersedia, lalu submit kehadiran. </string>
+
+    <string name="slide_33_title"> Mengunduh File/PPT/PDF </string>
+    <string name="slide_33_desc"> Tekan pada nama file yang ingin di unduh dari dosen. </string>
 </resources>

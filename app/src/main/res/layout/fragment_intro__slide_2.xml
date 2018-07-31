@@ -22,7 +22,7 @@
             android:id="@+id/slide_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/slide_2"
+            android:src="@drawable/slide_22"
             android:layout_centerHorizontal="true" />
 
 
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slide_2_title"
+                android:text="@string/slide_22_title"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/textColorSecondaryDark" />
@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slide_2_desc"
+                android:text="@string/slide_22_desc"
                 android:padding="10dp"
                 android:textSize="14sp"
                 android:textAlignment="center"

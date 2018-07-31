@@ -124,14 +124,14 @@ public class ClassesFragment extends SWDBaseFragment implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
-                            case 0: // Host class*/
+                            case 0: // Host class
                                 TeacherManager.getInstance().initialize(className, getContext());
                                 Intent teacherIntent = new Intent(getActivity(), TeacherClassActivity.class);
                                 startActivity(teacherIntent);
-                                /*break;
-                            case 1: // Participate class
-                                getBaseActivity().changeFragment(SearchClassFragment.newInstance(className));
                                 break;
+                            case 1: // Participate class*/
+                                getBaseActivity().changeFragment(SearchClassFragment.newInstance(className));
+                                /*break;
                         }
                     }
                 })
@@ -193,8 +193,10 @@ public class ClassesFragment extends SWDBaseFragment implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String className = editText.getText().toString();
-                        int jumlahPertemuan = Integer.parseInt(editText2.getText().toString());
-                        if (!TextUtils.isEmpty(className.trim())) {
+
+                        String jumlah = editText2.getText().toString();
+                        if (!TextUtils.isEmpty(className.trim()) && !TextUtils.isEmpty(jumlah.trim())) {
+                            int jumlahPertemuan = Integer.parseInt(editText2.getText().toString());
                             StudyClass studyClass = new StudyClass(className);
                             long errorCode = mDatabase.addClass(studyClass);
                             if (errorCode != -1) {

@@ -230,7 +230,7 @@ public class TeacherQuizFragment extends SWDBaseFragment implements
                             }
                         }
                         // return not called, means got error
-                        Toast.makeText(getContext(), R.string.create_class_failure_message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Gagal membuat pertemuan. Silahkan coba lagi.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
